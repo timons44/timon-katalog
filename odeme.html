@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ödeme</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <img src="images/logo.png" alt="Logo" class="logo">
+    <a href="sepet.html" class="cart-icon-btn">
+      🛒 Sepetim
+      <span class="cart-count" style="display:none;">0</span>
+    </a>
+  </header>
+
+  <!-- ADIM GÖSTERGESİ -->
+  <div style="background:#fff;border-bottom:1px solid #e8e8e8;padding:16px 24px;">
+    <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:8px;font-size:13px;">
+      <span style="color:#aaa;">Sepet</span>
+      <span style="color:#aaa;">→</span>
+      <span style="color:#aaa;">Bilgiler</span>
+      <span style="color:#aaa;">→</span>
+      <span style="color:#1565c0;font-weight:600;">Ödeme</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;">
+
+      <!-- SOL: ÖDEME FORMU -->
+      <div>
+        <form id="odeme-form" onsubmit="odemeGonder(event)">
+
+          <!-- GÜVENLİ ÖDEME BAŞLIĞI -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+            <span style="font-size:20px;">🔒</span>
+            <div>
+              <div style="font-size:15px;font-weight:600;color:#1a237e;">Güvenli Ödeme</div>
+              <div style="font-size:12px;color:#aaa;">256-bit SSL şifrelemesi ile korunmaktadır</div>
+            </div>
+          </div>
+
+          <!-- KART BİLGİLERİ -->
+          <div class="form-card">
+            <h2>Kart Bilgileri</h2>
+
+            <!-- KART ÖNİZLEME -->
+            <div id="kart-onizleme" style="background:linear-gradient(135deg,#1a237e,#1565c0);border-radius:12px;padding:24px;color:#fff;margin-bottom:20px;min-height:140px;position:relative;">
+              <div style="font-size:12px;opacity:0.7;margin-bottom:20px;">Banka Kartı / Kredi Kartı</div>
+              <div id="onizleme-no" style="font-size:20px;font-weight:600;letter-spacing:3px;margin-bottom:20px;">•••• •••• •••• ••••</div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+                <div>
+                  <div style="font-size:10px;opacity:0.7;margin-bottom:2px;">KART SAHİBİ</div>
+                  <div id="onizleme-isim" style="font-size:14px;font-weight:500;text-transform:uppercase;">AD SOYAD</div>
+                </div>
+                <div>
+                  <div style="font-size:10px;opacity:0.7;margin-bottom:2px;">SON KULLANIM</div>
+                  <div id="onizleme-skt" style="font-size:14px;font-weight:500;">MM/YY</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KART NO -->
+            <div class="form-group">
+              <label for="kart-no">Kart Numarası *</label>
+              <div class="card-input-wrap">
+                <input
+                  type="text"
+                  id="kart-no"
+                  placeholder="0000 0000 0000 0000"
+                  maxlength="19"
+                  required
+                  oninput="kartOnizlemeGuncelle()"
+                >
+                <span class="card-icon" id="kart-marka">💳</span>
+              </div>
+            </div>
+
+            <!-- KART SAHİBİ -->
+            <div class="form-group">
+              <label for="kart-isim">Kart Üzerindeki Ad Soyad *</label>
+              <input
+                type="text"
+                id="kart-isim"
+                placeholder="Ad Soyad"
+                required
+                oninput="kartOnizlemeGuncelle()"
+                style="text-transform:uppercase;"
+              >
+            </div>
+
+            <div class="form-row">
+              <!-- SKT -->
+              <div class="form-group">
+                <label for="skt">Son Kullanma Tarihi *</label>
+                <input
+                  type="text"
+                  id="skt"
+                  placeholder="AA/YY"
+                  maxlength="5"
+                  required
+                  oninput="kartOnizlemeGuncelle()"
+                >
+              </div>
+              <!-- CVV -->
+              <div class="form-group">
+                <label for="cvv">CVV *</label>
+                <div class="card-input-wrap">
+                  <input
+                    type="password"
+                    id="cvv"
+                    placeholder="•••"
+                    maxlength="3"
+                    required
+                  >
+                  <span class="card-icon" title="Kartın arka yüzündeki 3 haneli güvenlik kodu">?</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAKSİT SEÇENEKLERİ -->
+            <div class="form-group">
+              <label for="taksit">Taksit Seçeneği</label>
+              <select id="taksit">
+                <option value="1">Tek Çekim</option>
+                <option value="2">2 Taksit</option>
+                <option value="3">3 Taksit</option>
+                <option value="6">6 Taksit</option>
+                <option value="9">9 Taksit</option>
+                <option value="12">12 Taksit</option>
+              </select>
+              <div style="font-size:11px;color:#aaa;margin-top:4px;">
+                * Taksit seçenekleri bankanıza göre değişebilir
+              </div>
+            </div>
+
+          </div>
+
+          <!-- KVKK & ONAY -->
+          <div class="form-card">
+            <h2>Sözleşme ve Onay</h2>
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;">
+              <input type="checkbox" id="kvkk" required style="margin-top:3px;width:auto;">
+              <label for="kvkk" style="font-size:13px;color:#555;line-height:1.5;">
+                <strong>Kişisel Verilerin Korunması</strong> kapsamında bilgilerimin işlenmesini kabul ediyorum.
+              </label>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+              <input type="checkbox" id="sozlesme" required style="margin-top:3px;width:auto;">
+              <label for="sozlesme" style="font-size:13px;color:#555;line-height:1.5;">
+                <strong>Ön Bilgilendirme Formu</strong> ve <strong>Mesafeli Satış Sözleşmesi</strong>'ni okudum ve onaylıyorum.
+              </label>
+            </div>
+          </div>
+
+          <!-- ÖDEME BUTONU -->
+          <button type="submit" class="btn-primary" id="odeme-btn">
+            🔒 Güvenli Ödeme Yap
+          </button>
+
+          <div style="text-align:center;margin-top:12px;">
+            <a href="sepet.html" class="btn-secondary">← Sepete Dön</a>
+          </div>
+
+          <!-- BANKA LOGO ALANI -->
+          <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:20px;padding-top:16px;border-top:1px solid #e8e8e8;">
+            <span style="font-size:12px;color:#aaa;">Güvenli ödeme:</span>
+            <span style="font-size:12px;color:#aaa;font-weight:600;">Garanti BBVA</span>
+            <span style="font-size:12px;color:#aaa;">|</span>
+            <span style="font-size:12px;color:#aaa;">3D Secure</span>
+            <span style="font-size:12px;color:#aaa;">|</span>
+            <span style="font-size:12px;color:#aaa;">SSL</span>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- SAĞ: SİPARİŞ ÖZETİ -->
+      <div style="position:sticky;top:80px;">
+        <div class="summary-box">
+          <h2 style="font-size:16px;font-weight:600;margin-bottom:16px;color:#1a237e;">Sipariş Özeti</h2>
+          <div id="odeme-ozet">
+            <!-- app.js ile dolar -->
+          </div>
+        </div>
+
+        <!-- GÜVENLİK ROZETLERI -->
+        <div style="margin-top:16px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span>🔒</span>
+            <span style="font-size:13px;color:#555;">256-bit SSL Şifreleme</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span>✅</span>
+            <span style="font-size:13px;color:#555;">3D Secure Korumalı</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span>🏦</span>
+            <span style="font-size:13px;color:#555;">Garanti BBVA Altyapısı</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="text-align:center;padding:32px 16px;color:#aaa;font-size:13px;border-top:1px solid #e8e8e8;margin-top:40px;">
+    © 2024 Şirket Adı — Tüm hakları saklıdır.
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // KART ÖNİZLEME GÜNCELLE
+    function kartOnizlemeGuncelle() {
+      const no = document.getElementById("kart-no").value || "";
+      const isim = document.getElementById("kart-isim").value || "AD SOYAD";
+      const skt = document.getElementById("skt").value || "MM/YY";
+
+      // Kart no önizleme
+      const noTemiz = no.replace(/\s/g, "");
+      let noGoster = "";
+      for (let i = 0; i < 16; i++) {
+        if (i > 0 && i % 4 === 0) noGoster += " ";
+        noGoster += noTemiz[i] ? noTemiz[i] : "•";
+      }
+      document.getElementById("onizleme-no").textContent = noGoster;
+      document.getElementById("onizleme-isim").textContent = isim.toUpperCase() || "AD SOYAD";
+      document.getElementById("onizleme-skt").textContent = skt || "MM/YY";
+
+      // Kart markası tahmini
+      const marka = document.getElementById("kart-marka");
+      const ilkHane = noTemiz[0];
+      if (ilkHane === "4") marka.textContent = "VISA";
+      else if (ilkHane === "5") marka.textContent = "MC";
+      else if (ilkHane === "9") marka.textContent = "Troy";
+      else marka.textContent = "💳";
+    }
+
+    // ÖDEME BUTONU LOADING
+    document.getElementById("odeme-form").addEventListener("submit", function() {
+      const btn = document.getElementById("odeme-btn");
+      btn.textContent = "İşlem yapılıyor...";
+      btn.disabled = true;
+    });
+  </script>
+
+</body>
+</html>
