@@ -80,12 +80,8 @@ body {
 }
 
 .banner img {
-  width: 100% !important;
-  max-width: 1536px !important;
-  height: auto !important;
-  max-height: 320px;           /* banner yüksekliği — isteğe göre 280-400px arası ayarlayın */
-  object-fit: cover;
-  object-position: center top;
+  width: 100%;
+  height: auto;
   display: block;
   margin: 0 auto;
 }
